@@ -1,8 +1,44 @@
 # EcoLens AI 🍃
 
-**An AMD Slingshot Hackathon Project**
+EcoLens AI is a high-performance, intelligent product scanner that instantly evaluates the environmental and health impacts of everyday items. Our objective is to make sustainable shopping frictionless and data-driven for the everyday consumer. By simply snapping a photo of a product, packaging, or ingredients list, EcoLens AI utilizes advanced computer vision and Large Language Models to extract ingredients, flag toxic chemicals, and proactively suggest highly-rated, eco-friendly "Green Swaps."
 
-EcoLens AI is a high-performance sustainability scanner that uses the Gemini 1.5 Flash API to evaluate the environmental impact of everyday products. By instantly analyzing user-uploaded images, EcoLens identifies potential chemical hazards and intelligently suggests greener alternatives, helping consumers make conscious purchasing decisions.
+**🌍 Live Demo:** [https://eco-lens-ai.vercel.app/](https://eco-lens-ai.vercel.app/)
+
+## How It Works
+
+By bridging the "information gap" at the critical moment of purchase, EcoLens AI provides a comprehensive **0-100 Eco-Score** and highlights hidden "Red Flag" chemicals (like Phthalates or PFAS) in seconds. This empowers users to confidently reject harmful products and pivot to actionable, sustainable alternatives.
+
+### System Architecture
+
+Our overarching architecture relies on a privacy-first, edge-ready approach. Historical "impact data" is calculated and stored entirely on the client-side, ensuring user privacy and zero database latency.
+
+```mermaid
+graph TD
+    classDef frontend fill:#0f172a,stroke:#10b981,stroke-width:2px,color:#fff
+    classDef backend fill:#1e1e2e,stroke:#f59e0b,stroke-width:2px,color:#fff
+    classDef edge fill:#312e81,stroke:#6366f1,stroke-width:2px,color:#fff
+
+    subgraph Client ["Client-Side (Next.js & Vercel Edge)"]
+        UI["React UI Components"]:::frontend
+        Store[("Local Storage Data Layer")]:::frontend
+    end
+
+    subgraph Server ["API Layer"]
+        Route["Next.js App Router /api/analyze"]:::backend
+        Parser["Strict JSON Regex Parser"]:::backend
+    end
+
+    subgraph AI ["AI Processing Engine"]
+        Model["Gemini 1.5 Flash Vision Model"]:::edge
+    end
+
+    UI -->|"Base64 Image Post"| Route
+    Route -->|"Prompt + Image"| Model
+    Model -->|"Raw String Response"| Parser
+    Parser -->|"Clean JSON Array"| Route
+    Route -->|"Mapped Data Entities"| UI
+    UI <-->|"Sync State"| Store
+```
 
 ## Features
 
